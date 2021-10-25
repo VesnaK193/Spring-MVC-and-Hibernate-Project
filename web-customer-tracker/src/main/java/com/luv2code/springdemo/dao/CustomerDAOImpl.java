@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.luv2code.springdemo.entity.Customer;
 
 @Repository
-@Transactional
 public class CustomerDAOImpl implements CustomerDAO {
 
 	// need to inject the session factory
@@ -42,8 +41,20 @@ public class CustomerDAOImpl implements CustomerDAO {
 		//get current hibrnate session
 		Session currentSession = sessionFactory.getCurrentSession();
 		
-		//save the customer
-		currentSession.save(theCustomer);
+		//save/update the customer
+		currentSession.saveOrUpdate(theCustomer);
+	}
+
+	@Override
+	public Customer getCustomer(int theId) {
+		
+		//get the current hibernate session
+		Session currentSession = sessionFactory.getCurrentSession();
+		
+		//now retrieve/read from database using primary key
+		Customer theCustomer = currentSession.get(Customer.class, theId);
+		
+		return theCustomer;
 	}
 
 }
